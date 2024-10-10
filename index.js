@@ -9,11 +9,9 @@ app.post("/", express.json(), async (req, res) => {
   const tokenForUser = req.get("X-GitHub-Token");
   const octokit = new Octokit({ auth: tokenForUser });
   const user = await octokit.request("GET /user");
-  console.log("User:", user.data.login);
 
   // Parse the request payload and log it.
   const payload = req.body;
-  console.log("Payload:", payload);
 
   // Insert a special pirate-y system message in our message list.
   const messages = payload.messages;
