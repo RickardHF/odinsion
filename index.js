@@ -12,6 +12,7 @@ app.post("/", express.json(), async (req, res) => {
 
   // Parse the request payload and log it.
   const payload = req.body;
+  console.log("Received payload:", payload);
 
   // Insert a special pirate-y system message in our message list.
   const messages = payload.messages;
