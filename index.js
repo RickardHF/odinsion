@@ -12,7 +12,7 @@ app.post("/", express.json(), async (req, res) => {
 
   // Parse the request payload and log it.
   const payload = req.body;
-  console.log("Received payload:", payload);
+  console.log("Received payload:", JSON.stringify({payload}));
 
   // Insert system messages in our message list.
   const messages = payload.messages;
@@ -29,7 +29,7 @@ app.post("/", express.json(), async (req, res) => {
     content: "In every response you should weave in one of the stanzas from Havamal, the sayings of Odin.",
   });
 
-  console.log("Messages:", messages);
+  console.log("Messages:", JSON.stringify({ messages}));
 
   // Use Copilot's LLM to generate a response to the user's messages, with
   // our extra system messages attached.
