@@ -1,5 +1,6 @@
 import { Octokit } from "@octokit/core";
 import express from "express";
+import { Console } from "node:console";
 import { Readable } from "node:stream";
 
 const app = express()
@@ -12,7 +13,7 @@ app.post("/", express.json(), async (req, res) => {
 
   // Parse the request payload and log it.
   const payload = req.body;
-  console.log("Received payload:", JSON.stringify({payload}));
+  console.log("Received payload:", JSON.stringify({ payload }));
 
   // Insert system messages in our message list.
   const messages = payload.messages;
@@ -33,10 +34,10 @@ app.post("/", express.json(), async (req, res) => {
     content: "Use the references to files, code snippets, and other context in the user's messages to generate helpful completions.",
   });
 
-  console.log("Messages:", JSON.stringify({ messages}));
+  console.log("Messages:", JSON.stringify({ messages }));
 
   payload.messages = messages;
-  
+
   try {
     // Use Copilot's LLM to generate a response to the user's messages, with
     // our extra system messages attached.
@@ -51,9 +52,11 @@ app.post("/", express.json(), async (req, res) => {
         body: JSON.stringify(payload),
       }
     );
-    
-      // Stream the response straight back to the user.
-      Readable.from(copilotLLMResponse.body).pipe(res);
+
+    const responseBody = await copilotLLMResponse.json();
+    Console.log("CopilotLLMResponse:", responseBody);
+    // Stream the response straight back to the user.
+    Readable.from(copilotLLMResponse.body).pipe(res);
   } catch (error) {
     console.error("Error:", error);
     Readable.from("Something went wrong").pipe(res);
