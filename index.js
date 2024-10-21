@@ -36,22 +36,28 @@ app.post("/", express.json(), async (req, res) => {
   console.log("Messages:", JSON.stringify({ messages}));
 
   payload.messages = messages;
-  // Use Copilot's LLM to generate a response to the user's messages, with
-  // our extra system messages attached.
-  const copilotLLMResponse = await fetch(
-    "https://api.githubcopilot.com/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${tokenForUser}`,
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    }
-  );
-
-  // Stream the response straight back to the user.
-  Readable.from(copilotLLMResponse.body).pipe(res);
+  
+  try {
+    // Use Copilot's LLM to generate a response to the user's messages, with
+    // our extra system messages attached.
+    const copilotLLMResponse = await fetch(
+      "https://api.githubcopilot.com/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${tokenForUser}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+    
+      // Stream the response straight back to the user.
+      Readable.from(copilotLLMResponse.body).pipe(res);
+  } catch (error) {
+    console.error("Error:", error);
+    Readable.from("Something went wrong").pipe(res);
+  }
 })
 
 
