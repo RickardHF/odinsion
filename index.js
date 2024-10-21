@@ -49,7 +49,10 @@ app.post("/", express.json(), async (req, res) => {
           authorization: `Bearer ${tokenForUser}`,
           "content-type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          messages,
+          stream: true
+        }),
       }
     );
 
