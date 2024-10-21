@@ -54,7 +54,7 @@ app.post("/", express.json(), async (req, res) => {
     );
 
     const responseBody = await copilotLLMResponse.json();
-    Console.log("CopilotLLMResponse:", responseBody);
+    console.log("CopilotLLMResponse:", responseBody);
     // Stream the response straight back to the user.
     Readable.from(copilotLLMResponse.body).pipe(res);
   } catch (error) {
