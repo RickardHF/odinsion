@@ -36,8 +36,6 @@ app.post("/", express.json(), async (req, res) => {
 
   console.log("Messages:", JSON.stringify({ messages }));
 
-  payload.messages = messages;
-
   try {
     // Use Copilot's LLM to generate a response to the user's messages, with
     // our extra system messages attached.
@@ -51,18 +49,24 @@ app.post("/", express.json(), async (req, res) => {
         },
         body: JSON.stringify({
           messages,
-          stream: true
+          stream: true,
         }),
       }
     );
-
-    const responseBody = await copilotLLMResponse.json();
-    console.log("CopilotLLMResponse:", responseBody);
     // Stream the response straight back to the user.
     Readable.from(copilotLLMResponse.body).pipe(res);
   } catch (error) {
     console.error("Error:", error);
-    Readable.from("Something went wrong").pipe(res);
+
+    // If there was an error, return a generic error message.
+    res.json({
+      messages: [
+        {
+          role: "system",
+          content: "I'm sorry, I couldn't generate a response for you. Please try again later.",
+        },
+      ],
+    });
   }
 })
 
