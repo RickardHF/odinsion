@@ -27,6 +27,10 @@ app.post("/", express.json(), async (req, res) => {
   });
   messages.unshift({
     role: "system",
+    content: `Answer all questions in Norwegian`,
+  });
+  messages.unshift({
+    role: "system",
     content: "In every response you should weave in one of the stanzas from Havamal, the sayings of Odin.",
   });
   messages.unshift({
