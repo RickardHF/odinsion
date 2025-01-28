@@ -3,6 +3,7 @@
 ## Table of contents
 - [Local development](#local-development)
 - [API](#api)
+- [Request validation](#request-validation)
 - [User token](#user-token)
 - [Agent](#agent)
 - [Skillsets](#skillsets)
