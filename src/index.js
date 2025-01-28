@@ -2,8 +2,15 @@ import { Octokit } from "@octokit/core";
 import express from "express";
 import { Console } from "node:console";
 import { Readable } from "node:stream";
+import { skillsets } from "./routes/skillsets.js";
 
 const app = express()
+
+app.use(
+  express.json()
+);
+
+app.use("/skillset", skillsets);
 
 app.post("/", express.json(), async (req, res) => {
   // Identify the user, using the GitHub API token provided in the request headers.
@@ -13,7 +20,6 @@ app.post("/", express.json(), async (req, res) => {
 
   // Parse the request payload and log it.
   const payload = req.body;
-  console.log("Received payload:", JSON.stringify({ payload }));
 
   // Insert system messages in our message list.
   const messages = payload.messages;
