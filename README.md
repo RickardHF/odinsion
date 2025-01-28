@@ -49,6 +49,10 @@ This extension is an API, which handles traffic from the user to the copilot ext
 
 In all requests we are provided the token for the user, which has the scope that the GitHub App requires. This allows us to make requests to the GitHub API on behalf of the user.
 
+## Request validation
+
+We validate the request by checking the signatures of the request. This is way we can verify that the request is coming from GitHub and that it has not been tampered with.
+
 ## Agent 
 
 The agent is using the main entry point by sending the user messages to the "/" endpoint using a POST request.

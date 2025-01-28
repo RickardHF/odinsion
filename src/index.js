@@ -1,20 +1,31 @@
 import { Octokit } from "@octokit/core";
 import express from "express";
-import { Console } from "node:console";
 import { Readable } from "node:stream";
 import { skillsets } from "./routes/skillsets.js";
+import { verifySignature } from "./lib/helper.js";
 
 const app = express()
 
 app.use(
-  express.json()
+  express.json({
+    verify: (req, res, buf, encoding) => {
+      req.rawBody = buf.toString(encoding);
+    }
+  })
 );
 
 app.use("/skillset", skillsets);
 
 app.post("/", express.json(), async (req, res) => {
-  // Identify the user, using the GitHub API token provided in the request headers.
+
+  // Get user token from request headers. 
   const tokenForUser = req.get("X-GitHub-Token");
+
+  // Verify the request signature 
+  const is_verified = await verifySignature(req);
+  if (!is_verified) throw new Error("Invalid signature");
+
+  // Identify the user, using the GitHub API token provided in the request headers.
   const octokit = new Octokit({ auth: tokenForUser });
   const user = await octokit.request("GET /user");
 
@@ -39,8 +50,6 @@ app.post("/", express.json(), async (req, res) => {
     role: "system",
     content: "Use the references to files, code snippets, and other context in the user's messages to generate helpful completions.",
   });
-
-  console.log("Messages:", JSON.stringify({ messages }));
 
   try {
     // Use Copilot's LLM to generate a response to the user's messages, with
