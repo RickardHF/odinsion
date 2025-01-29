@@ -46,10 +46,25 @@ app.post("/", express.json(), async (req, res) => {
     role: "system",
     content: "In every response you should weave in one of the stanzas from Havamal, the sayings of Odin.",
   });
-  messages.unshift({
-    role: "system",
-    content: "Use the references to files, code snippets, and other context in the user's messages to generate helpful completions.",
-  });
+
+  // Get the last message from the user.
+  const lastMessage = messages[messages.length - 1];
+
+  // Add context to the last message if it references a client selection or file.
+  if(lastMessage.copilot_references) {
+    var context = "";
+    for (const reference of lastMessage.copilot_references) {
+      if(reference.type === "client.selection") {
+        context += `\n\nClient selection\nPath: ${reference.id}\nStart: ${reference.data.start}\nEnd: ${reference.data.end}\n${reference.data.content}`;
+      } else if(reference.type === "client.file") {
+        context += `\n\nClient File\nPath: ${reference.id}\nLanguage: ${reference.data.language}\n${reference.data.content}`;
+      }
+    }
+
+    lastMessage.content += context;
+    messages[messages.length - 1] = lastMessage;
+  }
+
 
   try {
     // Use Copilot's LLM to generate a response to the user's messages, with
