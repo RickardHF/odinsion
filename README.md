@@ -1,7 +1,9 @@
 # Odin extension - Odinsion
 
 __Links__:
+
 Agent Extension: https://github.com/apps/odinsion
+
 Skillset Extension: https://github.com/apps/odins-skills
 
 ## Introduction
