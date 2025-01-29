@@ -1,5 +1,9 @@
 # Odin extension - Odinsion
 
+__Links__:
+Agent Extension: https://github.com/apps/odinsion
+Skillset Extension: https://github.com/apps/odins-skills
+
 ## Introduction
 
 This is the Odin extension. This repository contains the backend for both the agent-extension and the skillset-extension. 
