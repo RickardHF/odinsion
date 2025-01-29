@@ -25,8 +25,10 @@ The API is built using Node.js and Express.js. We use the GitHub API to interact
     - [Agent](#agent)
     - [Skillsets](#skillsets)
 - [GitHub App](#github-app)
+    - [Permissions](#permissions)
     - [Agent Extension](#agent-extension)
     - [Skillset Extension](#skillset-extension)
+    - [Pre-authorization URL](#pre-authorization-url)
 
 # Local development
 
