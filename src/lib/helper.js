@@ -10,7 +10,11 @@ async function verifySignature(req) {
     const github_public_key_identifier = req.get("github-public-key-identifier");
     const github_public_key_signature = req.get("github-public-key-signature");
 
-    const github_public_keys = await fetchVerificationKeys();
+    const tokenForUser = req.get("X-GitHub-Token");
+
+    const github_public_keys = await fetchVerificationKeys({
+        token: tokenForUser
+    });
 
     const public_key = github_public_keys.keys.find(key => key.key_identifier === github_public_key_identifier);
     if (!public_key) {
